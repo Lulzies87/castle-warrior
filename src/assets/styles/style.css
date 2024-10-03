@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap");
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  background-color: #3f3851;
+}
+
+#instructionText {
+  position: absolute;
+  transform: translateX(-50%);
+  height: 3lh;
+  max-width: 1024px;
+  margin: 0;
+  opacity: 0;
+  color: white;
+  font-family: "Silkscreen", system-ui;
+  font-size: 1.1rem;
+  white-space: pre-line;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
