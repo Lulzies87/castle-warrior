@@ -7,8 +7,7 @@ This project is a 2D game developed using TypeScript and GSAP library for animat
 To run the project locally, follow these steps:
  1. Clone the repository.
  2. Install dependencies by running npm install.
- 3. Build the project using npm run build.
- 4. Start the development server with npm start.
+ 3. Start the development server with npm run dev.
 
 ## Usage
 Once the project is running, the player can control the character using the following keys:
