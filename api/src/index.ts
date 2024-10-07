@@ -1,19 +1,43 @@
 import "dotenv/config";
-
+import { createServer } from "http";
 import express from "express";
-// import cors from "cors";
+import mongoose from "mongoose";
 import { json } from "body-parser";
+import { Level } from "./Models/level.model";
 
 const app = express();
 
-// app.use(cors());
 app.use(json());
 
-app.get("/check", (req, res) => {
+app.get("/check", (_, res) => {
   res.status(200);
   res.send("Hello");
 });
 
-const PORT = process.env.PORT ?? 3000;
+app.get("/levels", async (req, res) => {
+  try {
+    const levelsData = await Level.findById("670283389c495ca6e7a771df");
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+    res.status(200);
+    res.json(levelsData);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+const server = createServer(app);
+const port = process.env.port ?? 3000;
+
+async function startServer() {
+  if (!process.env.CONN_STRING) {
+    throw new Error("Must provide a connection string");
+  }
+
+  await mongoose.connect(process.env.CONN_STRING, {
+    dbName: "castle-warrior",
+  });
+
+  server.listen(port, () => console.log(`Listening on port ${port}`));
+}
+
+startServer();
