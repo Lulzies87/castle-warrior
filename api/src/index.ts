@@ -3,7 +3,7 @@ import { createServer } from "http";
 import express from "express";
 import mongoose from "mongoose";
 import { json } from "body-parser";
-import { Level } from "./Models/level.model";
+// import { Level } from "./Models/level.model";
 
 const app = express();
 
@@ -16,10 +16,10 @@ app.get("/check", (_, res) => {
 
 app.get("/levels", async (req, res) => {
   try {
-    const levelsData = await Level.findById("670283389c495ca6e7a771df");
+    // const levelsData = await Level.findById("670283389c495ca6e7a771df");
 
     res.status(200);
-    res.json(levelsData);
+    // res.json(levelsData);
   } catch (error) {
     console.error(error);
   }

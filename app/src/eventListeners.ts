@@ -1,4 +1,5 @@
-import { doors, keys, player } from "./main";
+import { doors } from "./data/levels";
+import { keys, player } from "./main";
 
 export function handleKeyDown(event: KeyboardEvent) {
   if (player.preventInput) return;

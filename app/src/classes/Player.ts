@@ -2,8 +2,8 @@ import { Sprite } from "./Sprite";
 import { PlayerConstructor } from "../types/PlayerConstructor";
 
 export class Player extends Sprite {
-  velocity: Vector2D;
-  gravity: number;
+  velocity: Vector2D = { x: 0, y: 0 };;
+  gravity: number = 1;
   collisionBlocks: Box[];
   hitbox?: Box;
   preventInput?: boolean;
@@ -24,12 +24,7 @@ export class Player extends Sprite {
       animations,
       loop,
     });
-    this.velocity = {
-      x: 0,
-      y: 0,
-    };
 
-    this.gravity = 1;
     this.collisionBlocks = collisionBlocks;
   }
 

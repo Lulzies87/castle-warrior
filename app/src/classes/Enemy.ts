@@ -3,7 +3,6 @@ import { EnemyConstructor } from "../types/EnemyConstructor";
 import { Player } from "./Player";
 
 export class Enemy extends Sprite {
-  position: Vector2D;
   velocity: Vector2D = { x: 0, y: 0 };
   gravity: number = 1;
   collisionBlocks: Box[];
@@ -17,9 +16,28 @@ export class Enemy extends Sprite {
   constructor({
     position,
     collisionBlocks,
-    imageSrc,
-    frameRate,
-    animations,
+    imageSrc = "../src/assets/img/pig/idle.png",
+    frameRate = 11,
+    animations = {
+      idle: {
+        frameRate: 11,
+        frameBuffer: 4,
+        loop: true,
+        imageSrc: "../src/assets/img/pig/idle.png",
+      },
+      run: {
+        frameRate: 6,
+        frameBuffer: 4,
+        loop: true,
+        imageSrc: "../src/assets/img/pig/run.png",
+      },
+      attack: {
+        frameRate: 5,
+        frameBuffer: 6,
+        loop: true,
+        imageSrc: "../src/assets/img/pig/attack.png",
+      },
+    },
     loop,
     player,
   }: EnemyConstructor) {
@@ -32,6 +50,8 @@ export class Enemy extends Sprite {
     });
 
     this.position = position;
+    if (!collisionBlocks || !player)
+      throw new Error("collisionBlocks or player data missing");
     this.collisionBlocks = collisionBlocks;
     this.player = player;
     this.lastAttackTime = 0;
