@@ -3,25 +3,87 @@ import { createServer } from "http";
 import express from "express";
 import mongoose from "mongoose";
 import { json } from "body-parser";
-// import { Level } from "./Models/level.model";
+import bcrypt from "bcrypt";
+import { User } from "./Models/user.model";
 
 const app = express();
 
 app.use(json());
 
-app.get("/check", (_, res) => {
-  res.status(200);
-  res.send("Hello");
-});
-
-app.get("/levels", async (req, res) => {
+app.get("/users", async (_, res) => {
   try {
-    // const levelsData = await Level.findById("670283389c495ca6e7a771df");
+    const users = await User.find();
 
-    res.status(200);
-    // res.json(levelsData);
+    res.status(200).json(users);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/register", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    const existingUser = await User.findOne({ username: username });
+    if (existingUser) {
+      return res.status(409).json({ message: "Username already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      username: username,
+      password: hashedPassword,
+    });
+
+    await newUser.save();
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username: username });
+
+    if (!user) {
+      res.status(404).json({ message: "Username wasn't found" });
+      return;
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (isPasswordValid) {
+      res.status(200).json({ message: "User connected successfully" });
+    } else {
+      res.status(401).json({ message: "Unauthorized" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.delete("/deleteUser", async (req, res) => {
+  try {
+    const { username } = req.body;
+    const user = await User.findOne({ username: username });
+
+    if (!user) {
+      res.status(404).json({ message: "Username wasn't found" });
+      return;
+    }
+
+    await user.deleteOne();
+
+    res.status(200).json({ message: "User was deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
