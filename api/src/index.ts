@@ -28,6 +28,7 @@ app.post("/register", async (req, res) => {
     const existingUser = await User.findOne({ username: username });
     if (existingUser) {
       res.status(409).json({ message: "Username already exists" });
+      return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
