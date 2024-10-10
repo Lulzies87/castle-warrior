@@ -8,11 +8,12 @@ import {
   diamonds,
   doors,
   enemies,
+  init,
   instructionManager,
   levels,
-} from "./data/levels";
+} from "./levels";
 
-export const canvas = document.querySelector("canvas");
+export const canvas = document.querySelector("canvas") as HTMLCanvasElement;
 if (!canvas) throw new Error("Canvas element not found");
 canvas.width = 64 * 16;
 canvas.height = 64 * 9;
@@ -61,7 +62,7 @@ export const player = new Player({
           onComplete: () => {
             level++;
             if (level === 4) level = 1;
-            levels[level].init();
+            init(levels[level]);
             player.preventInput = false;
             gsap.to(overlay, {
               opacity: 0,
@@ -134,7 +135,7 @@ function animate() {
   c.restore();
 }
 
-levels[level].init();
+init(levels[level]);
 animate();
 
 window.addEventListener("keydown", handleKeyDown);

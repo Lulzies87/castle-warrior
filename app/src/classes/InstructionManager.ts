@@ -1,6 +1,15 @@
 import gsap from "gsap";
 
-type Instruction = { content: string; duration: number };
+interface Instruction {
+  position: {
+    top: number;
+    left: number;
+  };
+  message: {
+    text: string;
+    duration: number;
+  };
+}
 
 export class InstructionManager {
   private instructionText: HTMLParagraphElement;
@@ -11,11 +20,8 @@ export class InstructionManager {
     this.instructionText = instructionText;
   }
 
-  addInstruction(content: string, duration: number) {
-    this.instructions.push({ content, duration });
-  }
-
-  start() {
+  start(instructions: Instruction[]) {
+    this.instructions = instructions;
     setTimeout(() => {
       if (this.instructions.length > 0) {
         this.showInstruction(this.instructions[this.currentIndex]);
@@ -24,14 +30,16 @@ export class InstructionManager {
   }
 
   private showInstruction(instruction: Instruction) {
-    this.instructionText.textContent = instruction.content;
+    this.instructionText.textContent = instruction.message.text;
+    this.instructionText.style.top = `${instruction.position.top}px`;
+    this.instructionText.style.left = `${instruction.position.left}px`;
     gsap.to(this.instructionText, {
       opacity: 1,
       duration: 0.5,
       onComplete: () => {
         gsap.to(this.instructionText, {
           opacity: 0,
-          delay: instruction.duration,
+          delay: instruction.message.duration,
           duration: 0.5,
           onComplete: () => {
             this.currentIndex++;

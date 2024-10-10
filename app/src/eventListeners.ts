@@ -1,4 +1,4 @@
-import { doors } from "./data/levels";
+import { doors } from "./levels";
 import { keys, player } from "./main";
 
 export function handleKeyDown(event: KeyboardEvent) {
