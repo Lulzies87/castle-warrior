@@ -121,23 +121,38 @@ function drawLevel(c: CanvasRenderingContext2D) {
   player.draw(c);
 }
 
-function animate() {
-  window.requestAnimationFrame(animate);
+let fps = 60;
+let interval = Math.floor(1000 / fps);
+let startTime = performance.now();
+let previousTime = startTime;
+let currentTime = 0;
+let deltaTime = 0;
 
+function animate(timestamp: number) {
   if (!canvas || !c) throw new Error("Canvas or canvas context wasn't found");
-  player.handleInput(keys);
-  update(c);
-  drawLevel(c);
 
-  c.save();
-  c.globalAlpha = overlay.opacity;
-  c.fillStyle = "#3f3851";
-  c.fillRect(0, 0, canvas.width, canvas.height);
-  c.restore();
+  currentTime = timestamp;
+  deltaTime = currentTime - previousTime;
+
+  if (deltaTime > interval) {
+    previousTime = currentTime - (deltaTime % interval);
+
+    player.handleInput(keys);
+    update(c);
+    drawLevel(c);
+
+    c.save();
+    c.globalAlpha = overlay.opacity;
+    c.fillStyle = "#3f3851";
+    c.fillRect(0, 0, canvas.width, canvas.height);
+    c.restore();
+  }
+
+  window.requestAnimationFrame(animate);
 }
 
 init(levels[level]);
-animate();
+animate(0);
 
 window.addEventListener("resize", checkWindowSize);
 window.addEventListener("keydown", handleKeyDown);
