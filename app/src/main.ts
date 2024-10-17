@@ -23,13 +23,13 @@ if (!c) throw new Error("Canvas context not found");
 checkWindowSize();
 
 let collisionBlocks: CollisionBlock[] = [];
-let level = 1;
-let fps = 60;
-let interval = Math.floor(1000 / fps);
-let startTime = performance.now();
-let previousTime = startTime;
-let currentTime = 0;
-let deltaTime = 0;
+let level: number = 1;
+let fps: number = 60;
+let interval: number = Math.floor(1000 / fps);
+let startTime: number = performance.now();
+let previousTime: number = startTime;
+let currentTime: number = 0;
+let deltaTime: number = 0;
 
 export const player = new Player({
   imageSrc: "../src/assets/img/king/idle.png",
