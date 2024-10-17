@@ -4,7 +4,7 @@ import { Door } from "./classes/Door";
 import { Enemy } from "./classes/Enemy";
 import { InstructionManager } from "./classes/InstructionManager";
 import { Sprite } from "./classes/Sprite";
-import { canvas, player } from "./main";
+import { player } from "./main";
 import { Level, LevelData } from "./types/LevelData";
 import { createObjectsFrom2D, parse2D } from "./utils";
 
@@ -256,14 +256,6 @@ export function init(levelData: Level) {
   }
 
   if (levelData.instructions && levelData.instructions.length > 0) {
-    levelData.instructions.forEach((instruction) => {
-      const topPosition = canvas.offsetTop;
-      const leftPosition = canvas.offsetLeft;
-
-      instruction.position.top += topPosition;
-      instruction.position.left += leftPosition;
-    });
-
     instructionManager.start(levelData.instructions);
   }
 }

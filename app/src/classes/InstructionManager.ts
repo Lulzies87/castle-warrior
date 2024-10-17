@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import { canvas } from "../main";
 
 interface Instruction {
   position: {
@@ -31,8 +32,8 @@ export class InstructionManager {
 
   private showInstruction(instruction: Instruction) {
     this.instructionText.textContent = instruction.message.text;
-    this.instructionText.style.top = `${instruction.position.top}px`;
-    this.instructionText.style.left = `${instruction.position.left}px`;
+    this.instructionText.style.top = `${instruction.position.top + canvas.offsetTop}px`;
+    this.instructionText.style.left = `${instruction.position.left + canvas.offsetLeft}px`;
     gsap.to(this.instructionText, {
       opacity: 1,
       duration: 0.5,
