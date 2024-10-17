@@ -24,6 +24,12 @@ checkWindowSize();
 
 let collisionBlocks: CollisionBlock[] = [];
 let level = 1;
+let fps = 60;
+let interval = Math.floor(1000 / fps);
+let startTime = performance.now();
+let previousTime = startTime;
+let currentTime = 0;
+let deltaTime = 0;
 
 export const player = new Player({
   imageSrc: "../src/assets/img/king/idle.png",
@@ -120,13 +126,6 @@ function drawLevel(c: CanvasRenderingContext2D) {
 
   player.draw(c);
 }
-
-let fps = 60;
-let interval = Math.floor(1000 / fps);
-let startTime = performance.now();
-let previousTime = startTime;
-let currentTime = 0;
-let deltaTime = 0;
 
 function animate(timestamp: number) {
   if (!canvas || !c) throw new Error("Canvas or canvas context wasn't found");
