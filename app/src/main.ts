@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import "./assets/styles/style.css";
 import { Player } from "./classes/Player";
-import { handleKeyDown, handleKeyUp } from "./eventListeners";
+import { checkWindowSize, handleKeyDown, handleKeyUp } from "./eventListeners";
 import { CollisionBlock } from "./classes/CollisionBlock";
 import {
   background,
@@ -20,6 +20,7 @@ canvas.height = 64 * 9;
 
 const c = canvas.getContext("2d");
 if (!c) throw new Error("Canvas context not found");
+checkWindowSize();
 
 let collisionBlocks: CollisionBlock[] = [];
 let level = 1;
@@ -138,5 +139,6 @@ function animate() {
 init(levels[level]);
 animate();
 
+window.addEventListener("resize", checkWindowSize);
 window.addEventListener("keydown", handleKeyDown);
 window.addEventListener("keyup", handleKeyUp);
