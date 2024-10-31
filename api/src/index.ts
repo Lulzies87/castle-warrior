@@ -1,21 +1,6 @@
-import "dotenv/config";
-import { createServer } from "http";
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
-import { json } from "body-parser";
 import bcrypt from "bcrypt";
 import { User } from "./Models/user.model";
-
-const app = express();
-
-const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-app.use(json());
+import { app, startServer } from "./server";
 
 app.get("/users", async (_, res) => {
   try {
@@ -94,20 +79,5 @@ app.delete("/deleteUser", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
-const server = createServer(app);
-const port = process.env.port ?? 3000;
-
-async function startServer() {
-  if (!process.env.CONN_STRING) {
-    throw new Error("Must provide a connection string");
-  }
-
-  await mongoose.connect(process.env.CONN_STRING, {
-    dbName: "castle-warrior",
-  });
-
-  server.listen(port, () => console.log(`Listening on port ${port}`));
-}
 
 startServer();
