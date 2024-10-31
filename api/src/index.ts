@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { User } from "./Models/user.model";
 import { app, startServer } from "./server";
 
@@ -50,10 +51,23 @@ app.post("/login", async (req, res) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (isPasswordValid) {
-      res.status(200).json({ message: "User connected successfully" });
-    } else {
+    if (!isPasswordValid) {
       res.status(401).json({ message: "Unauthorized" });
+      return;
+    } else {
+      const token = jwt.sign({ username }, process.env.JWT_SECRET as string);
+
+      const cookieSettings = {
+        maxAge: 3600000,
+        signed: true,
+        domain: "localhost",
+        httpOnly: true,
+      };
+
+      res
+        .status(200)
+        .cookie("token", token, cookieSettings)
+        .json({ message: "User connected successfully" });
     }
   } catch (error) {
     console.error(error);

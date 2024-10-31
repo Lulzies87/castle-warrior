@@ -2,6 +2,7 @@ import "dotenv/config";
 import cors from "cors";
 import mongoose from "mongoose";
 import { json } from "body-parser";
+import cookieParser from "cookie-parser";
 import express from "express";
 
 export const app = express();
@@ -13,6 +14,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(json());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 const PORT = process.env.PORT ?? 3000;
 
