@@ -1,0 +1,71 @@
+@import "./colors.scss";
+
+.title {
+    margin: 0;
+    position: absolute;
+    bottom: calc(50vh + 160px);
+}
+
+.loginForm {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    background-color: $form-background;
+    padding: 2rem 3rem;
+    border: 6px solid $form-border;
+    border-radius: 2px;
+    align-self: center;
+
+    &__subtitle {
+        margin: 0;
+    }
+
+    &__formFieldsContainer {
+        display: flex;
+        flex-direction: column;
+        gap: .6rem;
+        margin: .8rem 0;
+
+        &__formField {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: .6rem;
+
+            &__input {
+                border: none;
+                border-radius: 2px;
+                color: $background;
+                font-family: inherit;
+                padding: .5rem;
+
+                &:focus {
+                    outline: 2px dotted $accent;
+                }
+            }
+        }
+    }
+
+    &__button {
+        background-color: $accent;
+        padding: .5rem 1rem;
+        border: none;
+        border-radius: 2px;
+        font-size: smaller;
+        cursor: pointer;
+        text-decoration: none;
+        font-family: inherit;
+
+        &:hover {
+            color: black;
+            border-color: black;
+            background-color: $hover;
+        }
+
+        &:focus {
+            outline: 2px dotted $accent;
+        }
+    }
+}

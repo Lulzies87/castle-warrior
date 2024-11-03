@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap");
+@import "./colors.scss";
+
+html,
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+body {
+  background-color: $background;
+  font-family: "Silkscreen", system-ui;
+}

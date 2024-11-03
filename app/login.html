@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/kingIcon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Castle Warrior</title>
+</head>
+
+<body>
+  <h1 class="title">Welcome to Castle Warrior!</h1>
+  <form class="loginForm" name="loginForm" action="/" method="POST" noValidate>
+    <h2 class="loginForm__subtitle">Login</h2>
+
+    <div class="loginForm__formFieldsContainer">
+      <div class="loginForm__formFieldsContainer__formField">
+        <label for="username">Username:</label>
+        <input class="loginForm__formFieldsContainer__formField__input" id="username" name="username" type="text"
+          placeholder="Enter username" autofocus required>
+      </div>
+      <div class="loginForm__formFieldsContainer__formField">
+        <label for="password">Password:</label>
+        <input class="loginForm__formFieldsContainer__formField__input" id="password" name="password" type="password"
+          placeholder="Enter password" required>
+      </div>
+    </div>
+
+    <button class="loginForm__button" type="submit">Login</button>
+  </form>
+
+
+  <script type="module" src="/src/login.ts"></script>
+</body>
+
+</html>

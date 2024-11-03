@@ -61,7 +61,6 @@ app.post("/login", async (req, res) => {
         maxAge: 3600000,
         signed: true,
         domain: "localhost",
-        httpOnly: true,
       };
 
       res

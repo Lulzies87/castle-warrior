@@ -1,5 +1,6 @@
 import gsap from "gsap";
-import "./assets/styles/style.css";
+import "./assets/styles/style.scss";
+import "./assets/styles/game.scss";
 import { Player } from "./classes/Player";
 import { checkWindowSize, handleKeyDown, handleKeyUp } from "./eventListeners";
 import { CollisionBlock } from "./classes/CollisionBlock";
@@ -12,6 +13,10 @@ import {
   instructionManager,
   levels,
 } from "./levels";
+
+const isAuthenticated = document.cookie.includes("token=");
+console.log(isAuthenticated);
+if (!isAuthenticated) window.location.href = "/login";
 
 export const canvas = document.querySelector("canvas") as HTMLCanvasElement;
 if (!canvas) throw new Error("Canvas element not found");
