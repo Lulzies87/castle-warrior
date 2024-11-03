@@ -17,7 +17,7 @@ form.addEventListener("submit", async (e) => {
   const password = formData.get("password") as string;
 
   try {
-    const res = await server.post(
+    await server.post(
       "/login",
       { username, password },
       { withCredentials: true }
