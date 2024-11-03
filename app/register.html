@@ -10,8 +10,8 @@
 
 <body>
   <h1 class="title">Welcome to Castle Warrior!</h1>
-  <form class="form" name="loginForm" action="/" method="POST" noValidate>
-    <h2 class="form__subtitle">Login</h2>
+  <form class="form" name="registerForm" action="/" method="POST" noValidate>
+    <h2 class="form__subtitle">Register</h2>
 
     <div class="form__formFieldsContainer">
       <div class="form__formFieldsContainer__formField">
@@ -24,14 +24,19 @@
         <input class="form__formFieldsContainer__formField__input" id="password" name="password" type="password"
           placeholder="Enter password" required>
       </div>
+      <div class="form__formFieldsContainer__formField">
+        <label for="confirmPassword">Confirm Password:</label>
+        <input class="form__formFieldsContainer__formField__input" id="confirmPassword" name="confirmPassword"
+          type="password" placeholder="Enter Password" required>
+      </div>
     </div>
 
-    <button class="form__button" type="submit">Login</button>
+    <button class="form__button" type="submit">Register</button>
   </form>
-  <p class="bottomMessage">New to Castle Warrior? <a class="bottomLink" href="/register">REGISTER HERE</a></p>
+  <p class="bottomMessage">Already signed to Castle Warrior? <a class="bottomLink" href="/login">LOGIN HERE</a></p>
 
 
-  <script type="module" src="/src/login.ts"></script>
+  <script type="module" src="/src/register.ts"></script>
 </body>
 
 </html>

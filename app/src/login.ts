@@ -1,6 +1,6 @@
 import axios from "axios";
 import "./assets/styles/style.scss";
-import "./assets/styles/login.scss";
+import "./assets/styles/entryForm.scss";
 import { server } from "./apiConfig";
 
 const form = document.forms.namedItem("loginForm") as HTMLFormElement;
@@ -16,6 +16,10 @@ form.addEventListener("submit", async (e) => {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 
+  await loginUser(username, password);
+});
+
+async function loginUser(username: string, password: string) {
   try {
     await server.post(
       "/login",
@@ -34,4 +38,4 @@ form.addEventListener("submit", async (e) => {
       }
     }
   }
-});
+}

@@ -1,12 +1,24 @@
-@use "colors" as *;
+@use "colors"as *;
 
-.title {
+.title,
+.bottomMessage {
     margin: 0;
     position: absolute;
-    bottom: calc(50vh + 160px);
 }
 
-.loginForm {
+.title {
+    bottom: calc(50vh + 180px);
+}
+
+.bottomMessage {
+    top: calc(50vh + 180px);
+}
+
+.bottomLink {
+    color: $accent;
+}
+
+.form {
     position: absolute;
     display: flex;
     flex-direction: column;

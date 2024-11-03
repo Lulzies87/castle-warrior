@@ -14,6 +14,22 @@ app.get("/users", async (_, res) => {
   }
 });
 
+app.get("/checkUsername", async (req, res) => {
+  const { username } = req.query;
+
+  try {
+    const existingUser = await User.findOne({ username }).select("username");
+    if (existingUser) {
+      res.status(400).json({ message: "Username already taken" });
+    } else {
+      res.status(200).json({ message: "Username available" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.post("/register", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -33,7 +49,18 @@ app.post("/register", async (req, res) => {
 
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    const token = jwt.sign({ username }, process.env.JWT_SECRET as string);
+
+    const cookieSettings = {
+      maxAge: 3600000,
+      signed: true,
+      domain: "localhost",
+    };
+
+    res
+      .status(201)
+      .cookie("token", token, cookieSettings)
+      .json({ message: "User registered successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
