@@ -15,7 +15,6 @@ import {
 } from "./levels";
 
 const isAuthenticated = document.cookie.includes("token=");
-console.log(isAuthenticated);
 if (!isAuthenticated) window.location.href = "/login";
 
 export const canvas = document.querySelector("canvas") as HTMLCanvasElement;

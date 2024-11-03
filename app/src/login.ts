@@ -23,7 +23,7 @@ form.addEventListener("submit", async (e) => {
       { withCredentials: true }
     );
 
-    console.log(res.data.message);
+    window.location.href = "/";
   } catch (err) {
     if (axios.isAxiosError(err)) {
       console.error(err);
