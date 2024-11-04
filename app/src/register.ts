@@ -2,6 +2,9 @@ import axios from "axios";
 import "./assets/styles/style.scss";
 import "./assets/styles/entryForm.scss";
 import { server } from "./apiConfig";
+import { isUserLoggedIn } from "./utils";
+
+if (isUserLoggedIn()) window.location.href = "/";
 
 const form = document.forms.namedItem("registerForm") as HTMLFormElement;
 

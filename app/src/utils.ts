@@ -1,6 +1,15 @@
 import { CollisionBlock } from "./classes/CollisionBlock";
 
-export function parse2D(arr: number[]): number[][] {
+function isUserLoggedIn(): boolean {
+  const userToken = document.cookie.includes("token=");
+  if (userToken) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function parse2D(arr: number[]): number[][] {
   const rows: number[][] = [];
   for (let i = 0; i < arr.length; i += 16) {
     rows.push(arr.slice(i, i + 16));
@@ -9,7 +18,7 @@ export function parse2D(arr: number[]): number[][] {
   return rows;
 }
 
-export function createObjectsFrom2D(array: number[][]): CollisionBlock[] {
+function createObjectsFrom2D(array: number[][]): CollisionBlock[] {
   const objects: CollisionBlock[] = [];
   array.forEach((row: number[], y: number) => {
     row.forEach((symbol: number, x: number) => {
@@ -41,3 +50,5 @@ export function createObjectsFrom2D(array: number[][]): CollisionBlock[] {
 
   return objects;
 }
+
+export { isUserLoggedIn, parse2D, createObjectsFrom2D };

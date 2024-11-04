@@ -14,8 +14,12 @@
     top: calc(50vh + 180px);
 }
 
-.bottomLink {
+.link {
     color: $accent;
+
+    &:hover {
+        color: $hover;
+    }
 }
 
 .form {
@@ -31,6 +35,10 @@
     align-self: center;
 
     &__subtitle {
+        margin: 0;
+    }
+
+    &__guestLink {
         margin: 0;
     }
 

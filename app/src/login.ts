@@ -2,6 +2,9 @@ import axios from "axios";
 import "./assets/styles/style.scss";
 import "./assets/styles/entryForm.scss";
 import { server } from "./apiConfig";
+import { isUserLoggedIn } from "./utils";
+
+if (isUserLoggedIn()) window.location.href = "/";
 
 const form = document.forms.namedItem("loginForm") as HTMLFormElement;
 
@@ -17,6 +20,21 @@ form.addEventListener("submit", async (e) => {
   const password = formData.get("password") as string;
 
   await loginUser(username, password);
+});
+
+const guestLink = document.getElementById("guestLink") as HTMLAnchorElement;
+
+if (!guestLink) {
+  throw new Error("Couldn't find guest link element");
+}
+
+guestLink.addEventListener("click", async () => {
+  try {
+    await server.get("/guest", { withCredentials: true });
+    window.location.href = "/";
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 async function loginUser(username: string, password: string) {

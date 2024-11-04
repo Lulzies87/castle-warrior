@@ -13,9 +13,9 @@ import {
   instructionManager,
   levels,
 } from "./levels";
+import { isUserLoggedIn } from "./utils";
 
-const isAuthenticated = document.cookie.includes("token=");
-if (!isAuthenticated) window.location.href = "/login";
+if (!isUserLoggedIn()) window.location.href = "/login";
 
 export const canvas = document.querySelector("canvas") as HTMLCanvasElement;
 if (!canvas) throw new Error("Canvas element not found");

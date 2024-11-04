@@ -3,26 +3,33 @@ import jwt from "jsonwebtoken";
 import { User } from "./Models/user.model";
 import { app, startServer } from "./server";
 
-app.get("/users", async (_, res) => {
+app.post("/login", async (req, res) => {
   try {
-    const users = await User.find();
+    const { username, password } = req.body;
+    const user = await User.findOne({ username: username });
 
-    res.status(200).json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+    if (!user) {
+      res.status(404).json({ message: "Username wasn't found" });
+      return;
+    }
 
-app.get("/checkUsername", async (req, res) => {
-  const { username } = req.query;
-
-  try {
-    const existingUser = await User.findOne({ username }).select("username");
-    if (existingUser) {
-      res.status(400).json({ message: "Username already taken" });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
     } else {
-      res.status(200).json({ message: "Username available" });
+      const token = jwt.sign({ username }, process.env.JWT_SECRET as string);
+
+      const cookieSettings = {
+        maxAge: 3600000,
+        signed: true,
+        domain: process.env.DOMAIN,
+      };
+
+      res
+        .status(200)
+        .cookie("token", token, cookieSettings)
+        .json({ message: "User connected successfully" });
     }
   } catch (error) {
     console.error(error);
@@ -54,7 +61,7 @@ app.post("/register", async (req, res) => {
     const cookieSettings = {
       maxAge: 3600000,
       signed: true,
-      domain: "localhost",
+      domain: process.env.DOMAIN,
     };
 
     res
@@ -67,33 +74,30 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.get("/guest", (_, res) => {
+  const guestToken = generateGuestToken();
+
+  const cookieSettings = {
+    maxAge: 3600000,
+    signed: true,
+    domain: process.env.DOMAIN,
+  };
+
+  res
+    .status(200)
+    .cookie("token", guestToken, cookieSettings)
+    .json({ message: "Guest connected successfully" });
+});
+
+app.get("/checkUsername", async (req, res) => {
+  const { username } = req.query;
+
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username: username });
-
-    if (!user) {
-      res.status(404).json({ message: "Username wasn't found" });
-      return;
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      res.status(401).json({ message: "Unauthorized" });
-      return;
+    const existingUser = await User.findOne({ username }).select("username");
+    if (existingUser) {
+      res.status(400).json({ message: "Username already taken" });
     } else {
-      const token = jwt.sign({ username }, process.env.JWT_SECRET as string);
-
-      const cookieSettings = {
-        maxAge: 3600000,
-        signed: true,
-        domain: "localhost",
-      };
-
-      res
-        .status(200)
-        .cookie("token", token, cookieSettings)
-        .json({ message: "User connected successfully" });
+      res.status(200).json({ message: "Username available" });
     }
   } catch (error) {
     console.error(error);
@@ -119,5 +123,9 @@ app.delete("/deleteUser", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+function generateGuestToken() {
+  return "guest-token-" + Math.random().toString(36).slice(2, 11);
+}
 
 startServer();

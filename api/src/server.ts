@@ -8,7 +8,7 @@ import express from "express";
 export const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.CORS_ORIGIN,
   credentials: true,
 };
 
@@ -25,7 +25,7 @@ export async function startServer() {
 
   try {
     await mongoose.connect(process.env.CONN_STRING, {
-      dbName: "castle-warrior",
+      dbName: process.env.DB_NAME,
     });
 
     app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
