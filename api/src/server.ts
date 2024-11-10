@@ -7,12 +7,13 @@ import express from "express";
 
 export const app = express();
 
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: process.env.CORS_ORIGIN,
+//   credentials: true,
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
