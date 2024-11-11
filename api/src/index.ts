@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { User } from "./Models/user.model";
 import { app, startServer } from "./server";
 
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username: username });
@@ -37,7 +37,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -74,7 +74,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.get("/guest", (_, res) => {
+app.get("/api/guest", (_, res) => {
   const guestToken = generateGuestToken();
 
   const cookieSettings = {
@@ -89,7 +89,7 @@ app.get("/guest", (_, res) => {
     .json({ message: "Guest connected successfully" });
 });
 
-app.get("/checkUsername", async (req, res) => {
+app.get("/api/checkUsername", async (req, res) => {
   const { username } = req.query;
 
   try {
@@ -105,24 +105,24 @@ app.get("/checkUsername", async (req, res) => {
   }
 });
 
-app.delete("/deleteUser", async (req, res) => {
-  try {
-    const { username } = req.body;
-    const user = await User.findOne({ username: username });
+// app.delete("/api/deleteUser", async (req, res) => {
+//   try {
+//     const { username } = req.body;
+//     const user = await User.findOne({ username: username });
 
-    if (!user) {
-      res.status(404).json({ message: "Username wasn't found" });
-      return;
-    }
+//     if (!user) {
+//       res.status(404).json({ message: "Username wasn't found" });
+//       return;
+//     }
 
-    await user.deleteOne();
+//     await user.deleteOne();
 
-    res.status(200).json({ message: "User was deleted" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+//     res.status(200).json({ message: "User was deleted" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
 
 function generateGuestToken() {
   return "guest-token-" + Math.random().toString(36).slice(2, 11);

@@ -41,7 +41,7 @@ form.addEventListener("submit", async (e) => {
 
 async function isAvailable(username: string): Promise<boolean> {
   try {
-    await server.get("/checkUsername", { params: { username } });
+    await server.get("/api/checkUsername", { params: { username } });
     return true;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -60,7 +60,7 @@ async function isAvailable(username: string): Promise<boolean> {
 async function registerUser(username: string, password: string) {
   try {
     await server.post(
-      "/register",
+      "/api/register",
       { username, password },
       { withCredentials: true }
     );

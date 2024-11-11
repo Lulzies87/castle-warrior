@@ -30,7 +30,7 @@ if (!guestLink) {
 
 guestLink.addEventListener("click", async () => {
   try {
-    await server.get("/guest", { withCredentials: true });
+    await server.get("/api/guest", { withCredentials: true });
     window.location.href = "/";
   } catch (error) {
     console.error(error);
@@ -40,7 +40,7 @@ guestLink.addEventListener("click", async () => {
 async function loginUser(username: string, password: string) {
   try {
     await server.post(
-      "/login",
+      "/api/login",
       { username, password },
       { withCredentials: true }
     );
