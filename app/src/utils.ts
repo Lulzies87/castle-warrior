@@ -91,6 +91,12 @@ function setupWindowSizeCheck() {
   window.addEventListener("resize", checkWindowSize);
 }
 
+function updateScoreDisplay(score: number): void {
+  const scoreElement = document.getElementById("score");
+  if (!scoreElement) throw new Error("Score element wasn't found");
+  scoreElement.innerText = `Score: ${score}`;
+}
+
 export {
   isUserLoggedIn,
   parse2D,
@@ -99,5 +105,6 @@ export {
   showMessage,
   hideMessage,
   checkWindowSize,
-  setupWindowSizeCheck
+  setupWindowSizeCheck,
+  updateScoreDisplay
 };

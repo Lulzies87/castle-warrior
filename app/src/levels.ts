@@ -3,10 +3,11 @@ import { Diamond } from "./classes/Diamond";
 import { Door } from "./classes/Door";
 import { Enemy } from "./classes/Enemy";
 import { InstructionManager } from "./classes/InstructionManager";
+import { Score } from "./classes/Score";
 import { Sprite } from "./classes/Sprite";
 import { player } from "./main";
 import { Level, LevelData } from "./types/LevelData";
-import { createObjectsFrom2D, parse2D } from "./utils";
+import { createObjectsFrom2D, parse2D, updateScoreDisplay } from "./utils";
 
 const instructionText = document.getElementById(
   "instructionText"
@@ -20,6 +21,7 @@ export let background: Sprite;
 export let doors: Door[] = [];
 export let diamonds: Diamond[] = [];
 export let enemies: Enemy[] = [];
+const score = new Score();
 
 export const levels: LevelData = {
   1: {
@@ -210,7 +212,8 @@ export function init(levelData: Level) {
         new Diamond({
           position: { x: diamond.position.x, y: diamond.position.y },
           onCollision: () => {
-            console.log("Diamond Collected!");
+            score.addPoints(10);
+            updateScoreDisplay(score.getScore());
           },
         })
       );
