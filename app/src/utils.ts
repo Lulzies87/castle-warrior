@@ -51,4 +51,53 @@ function createObjectsFrom2D(array: number[][]): CollisionBlock[] {
   return objects;
 }
 
-export { isUserLoggedIn, parse2D, createObjectsFrom2D };
+function isWindowSizeOk(): boolean {
+  if (window.innerWidth < 1024 || window.innerHeight < 576) return false;
+  return true;
+}
+
+function showMessage(message: string) {
+  const messageContainer = document.getElementById("messageContainer");
+  const messageElement = document.getElementById("message");
+
+  if (messageContainer && messageElement) {
+    messageElement.innerText = message;
+    messageContainer.style.visibility = "visible";
+  }
+}
+
+function hideMessage() {
+  const messageContainer = document.getElementById("messageContainer");
+  const messageElement = document.getElementById("message");
+
+  if (messageContainer && messageElement) {
+    messageContainer.style.visibility = "hidden";
+    messageElement.innerText = "";
+  }
+}
+
+function checkWindowSize() {
+  if (!isWindowSizeOk()) {
+    showMessage(
+      "This game is designed to run on a PC with minimum resolution of 1024x576 please adjust window size or run on a compatible screen"
+    );
+  } else {
+    hideMessage();
+  }
+}
+
+function setupWindowSizeCheck() {
+  checkWindowSize();
+  window.addEventListener("resize", checkWindowSize);
+}
+
+export {
+  isUserLoggedIn,
+  parse2D,
+  createObjectsFrom2D,
+  isWindowSizeOk,
+  showMessage,
+  hideMessage,
+  checkWindowSize,
+  setupWindowSizeCheck
+};

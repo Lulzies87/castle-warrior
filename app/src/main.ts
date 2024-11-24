@@ -2,7 +2,7 @@ import gsap from "gsap";
 import "./assets/styles/style.scss";
 import "./assets/styles/game.scss";
 import { Player } from "./classes/Player";
-import { checkWindowSize, handleKeyDown, handleKeyUp } from "./eventListeners";
+import { handleKeyDown, handleKeyUp } from "./eventListeners";
 import { CollisionBlock } from "./classes/CollisionBlock";
 import {
   background,
@@ -13,9 +13,11 @@ import {
   instructionManager,
   levels,
 } from "./levels";
-import { isUserLoggedIn } from "./utils";
+import { isUserLoggedIn, setupWindowSizeCheck } from "./utils";
 
 if (!isUserLoggedIn()) window.location.href = "/login";
+
+setupWindowSizeCheck();
 
 export const canvas = document.querySelector("canvas") as HTMLCanvasElement;
 if (!canvas) throw new Error("Canvas element not found");
@@ -24,7 +26,6 @@ canvas.height = 64 * 9;
 
 const c = canvas.getContext("2d");
 if (!c) throw new Error("Canvas context not found");
-checkWindowSize();
 
 let collisionBlocks: CollisionBlock[] = [];
 let level: number = 1;
@@ -157,6 +158,5 @@ function animate(timestamp: number) {
 init(levels[level]);
 animate(0);
 
-window.addEventListener("resize", checkWindowSize);
 window.addEventListener("keydown", handleKeyDown);
 window.addEventListener("keyup", handleKeyUp);

@@ -2,9 +2,11 @@ import axios from "axios";
 import "./assets/styles/style.scss";
 import "./assets/styles/entryForm.scss";
 import { server } from "./apiConfig";
-import { isUserLoggedIn } from "./utils";
+import { isUserLoggedIn, setupWindowSizeCheck } from "./utils";
 
 if (isUserLoggedIn()) window.location.href = "/";
+
+setupWindowSizeCheck();
 
 const form = document.forms.namedItem("loginForm") as HTMLFormElement;
 

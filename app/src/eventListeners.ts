@@ -1,5 +1,5 @@
 import { doors } from "./levels";
-import { canvas, keys, player } from "./main";
+import { keys, player } from "./main";
 
 export function handleKeyDown(event: KeyboardEvent) {
   if (player.preventInput) return;
@@ -47,39 +47,5 @@ export function handleKeyUp(event: KeyboardEvent) {
     case "KeyD":
       keys.KeyD.pressed = false;
       break;
-  }
-}
-
-let isDisplayingWindowSizeMessage: boolean = false;
-
-export function checkWindowSize() {
-  if (canvas.width > window.innerWidth || canvas.height > window.innerHeight) {
-    if (isDisplayingWindowSizeMessage) return;
-    showMessage(
-      "This game is designed to run on a PC with minimum resolution of 1024x576 please adjust window size or run on a compatible screen"
-    );
-    isDisplayingWindowSizeMessage = true;
-  } else {
-    if (isDisplayingWindowSizeMessage) {
-      hideMessage();
-      isDisplayingWindowSizeMessage = false;
-    }
-  }
-}
-
-function showMessage(message: string) {
-  const messageElement = document.getElementById("message");
-  const messageContainer = document.getElementById("messageContainer");
-
-  if (messageElement && messageContainer) {
-    messageElement.innerText = message;
-    messageContainer.style.visibility = "visible";
-  }
-}
-
-function hideMessage() {
-  const messageContainer = document.getElementById("messageContainer");
-  if (messageContainer) {
-    messageContainer.style.visibility = "hidden";
   }
 }
