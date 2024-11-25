@@ -15,9 +15,7 @@ export function handleKeyDown(event: KeyboardEvent) {
           player.hitbox.sides.bottom >= door.position.y &&
           player.hitbox.sides.top <= door.position.y + door.height
         ) {
-          player.velocity.x = 0;
-          player.velocity.y = 0;
-          player.preventInput = true;
+          player.reset();
           player.switchSprite("enterDoor");
           door.play();
           return;

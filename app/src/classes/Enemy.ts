@@ -9,44 +9,39 @@ export class Enemy extends Sprite {
   hitbox?: Box;
   visionbox?: Box;
   player: Player;
-  lastDirection?: string;
+  lastDirection?: "left" | "right";
   isAttacking?: boolean;
   lastAttackTime: number;
 
-  constructor({
-    position,
-    collisionBlocks,
-    imageSrc = "../src/assets/img/pig/idle.png",
-    frameRate = 11,
-    animations = {
-      idle: {
-        frameRate: 11,
-        frameBuffer: 4,
-        loop: true,
-        imageSrc: "../src/assets/img/pig/idle.png",
-      },
-      run: {
-        frameRate: 6,
-        frameBuffer: 4,
-        loop: true,
-        imageSrc: "../src/assets/img/pig/run.png",
-      },
-      attack: {
-        frameRate: 5,
-        frameBuffer: 6,
-        loop: true,
-        imageSrc: "../src/assets/img/pig/attack.png",
-      },
-    },
-    loop,
-    player,
-  }: EnemyConstructor) {
+  constructor({ position, collisionBlocks, player }: EnemyConstructor) {
     super({
       position,
-      imageSrc,
-      frameRate,
-      animations,
-      loop,
+      imageSrc: "../src/assets/img/pig/idle.png",
+      frameRate: 11,
+      animations: {
+        idle: {
+          frameRate: 11,
+          frameBuffer: 4,
+          loop: true,
+          imageSrc: "../src/assets/img/pig/idle.png",
+        },
+        run: {
+          frameRate: 6,
+          frameBuffer: 4,
+          loop: true,
+          imageSrc: "../src/assets/img/pig/run.png",
+        },
+        attack: {
+          frameRate: 5,
+          frameBuffer: 6,
+          loop: false,
+          imageSrc: "../src/assets/img/pig/attack.png",
+          onComplete: () => {
+            this.player.hit(this.lastDirection!);
+            this.switchSprite("idle");
+          },
+        },
+      },
     });
 
     this.position = position;
@@ -71,7 +66,7 @@ export class Enemy extends Sprite {
     this.updateVisionbox();
 
     this.checkForVerticalCollisions();
-    this.checkForPlayerCollision();
+    this.lookForPlayer();
     this.checkReach();
   }
 
@@ -186,7 +181,7 @@ export class Enemy extends Sprite {
     }
   }
 
-  checkForPlayerCollision() {
+  lookForPlayer() {
     this.velocity.x = 0;
     if (this.isAttacking) return;
     if (
@@ -197,15 +192,19 @@ export class Enemy extends Sprite {
       this.visionbox.sides.bottom >= this.player.hitbox.sides.top &&
       this.visionbox.sides.top <= this.player.hitbox.sides.bottom
     ) {
-      this.switchSprite("run");
-      if (this.player.hitbox.position.x < this.hitbox!.position.x) {
-        this.flip = false;
-        this.velocity.x = -2;
-        this.lastDirection = "left";
+      if (this.isWithinReach()) {
+        this.switchSprite("idle");
       } else {
-        this.flip = true;
-        this.velocity.x = 2;
-        this.lastDirection = "right";
+        this.switchSprite("run");
+        if (this.player.hitbox.position.x < this.hitbox!.position.x) {
+          this.flip = false;
+          this.velocity.x = -2;
+          this.lastDirection = "left";
+        } else {
+          this.flip = true;
+          this.velocity.x = 2;
+          this.lastDirection = "right";
+        }
       }
     } else {
       this.switchSprite("idle");
@@ -215,22 +214,20 @@ export class Enemy extends Sprite {
 
   checkReach() {
     const currentTime = Date.now();
-    const attackCooldown = 2000;
+    const attackCooldown = 1500;
 
-    if (
-      this.hitbox &&
-      this.player.hitbox &&
-      this.hitbox.sides.left - 20 <= this.player.hitbox.sides.right &&
-      this.hitbox.sides.right + 20 >= this.player.hitbox.sides.left &&
-      this.hitbox.sides.bottom + 20 >= this.player.hitbox.sides.top &&
-      this.hitbox.sides.top - 20 <= this.player.hitbox.sides.bottom
-    ) {
+    if (this.isWithinReach() && this.hitbox && this.player.hitbox) {
+      this.velocity.x = 0;
+      this.isAttacking = true;
       const playerCenterX =
         this.player.hitbox.position.x + this.player.hitbox.width / 2;
       const enemyCenterX = this.hitbox.position.x + this.hitbox.width / 2;
 
       if (currentTime - this.lastAttackTime >= attackCooldown) {
-        this.isAttacking = true;
+        if (this.player.preventInput) {
+          this.isAttacking = false;
+          return;
+        }
         this.switchSprite("attack");
         this.flip = enemyCenterX <= playerCenterX;
         this.lastAttackTime = currentTime;
@@ -238,5 +235,18 @@ export class Enemy extends Sprite {
     } else {
       this.isAttacking = false;
     }
+  }
+
+  isWithinReach() {
+    if (
+      this.hitbox &&
+      this.player.hitbox &&
+      this.hitbox.sides.left - 20 <= this.player.hitbox.sides.right &&
+      this.hitbox.sides.right + 20 >= this.player.hitbox.sides.left &&
+      this.hitbox.sides.bottom + 20 >= this.player.hitbox.sides.top &&
+      this.hitbox.sides.top - 20 <= this.player.hitbox.sides.bottom
+    )
+      return true;
+    return false;
   }
 }

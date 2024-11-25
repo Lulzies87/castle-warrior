@@ -1,28 +1,61 @@
 import { Sprite } from "./Sprite";
 import { PlayerConstructor } from "../types/PlayerConstructor";
+import { nextLevel } from "../main";
 
 export class Player extends Sprite {
-  velocity: Vector2D = { x: 0, y: 0 };;
+  velocity: Vector2D = { x: 0, y: 0 };
   gravity: number = 1;
   collisionBlocks: Box[];
   hitbox?: Box;
   preventInput?: boolean;
   lastDirection?: string;
   isAttacking?: boolean = false;
+  isHit?: boolean = false;
 
-  constructor({
-    collisionBlocks,
-    imageSrc,
-    frameRate,
-    animations,
-    loop,
-  }: PlayerConstructor) {
+  constructor({ collisionBlocks = [] }: PlayerConstructor) {
     super({
       position: { x: 200, y: 200 },
-      imageSrc,
-      frameRate,
-      animations,
-      loop,
+      imageSrc: "../src/assets/img/king/idle.png",
+      frameRate: 11,
+      animations: {
+        idle: {
+          frameRate: 11,
+          frameBuffer: 4,
+          loop: true,
+          imageSrc: "../src/assets/img/king/idle.png",
+        },
+        run: {
+          frameRate: 8,
+          frameBuffer: 4,
+          loop: true,
+          imageSrc: "../src/assets/img/king/run.png",
+        },
+        attack: {
+          frameRate: 3,
+          frameBuffer: 4,
+          loop: false,
+          imageSrc: "../src/assets/img/king/attack.png",
+          onComplete: () => {
+            this.isAttacking = false;
+            this.switchSprite("idle");
+          },
+        },
+        hit: {
+          frameRate: 2,
+          frameBuffer: 4,
+          loop: true,
+          imageSrc: "../src/assets/img/king/hit.png",
+        },
+        enterDoor: {
+          frameRate: 8,
+          frameBuffer: 6,
+          loop: false,
+          imageSrc: "../src/assets/img/king/enterDoor.png",
+          onComplete: () => {
+            nextLevel();
+          },
+        },
+      },
     });
 
     this.collisionBlocks = collisionBlocks;
@@ -42,7 +75,7 @@ export class Player extends Sprite {
   }
 
   handleInput(keys: { [key: string]: { pressed: boolean } }) {
-    if (this.preventInput || this.isAttacking) return;
+    if (this.preventInput || this.isAttacking || this.isHit) return;
     this.velocity.x = 0;
     if (keys.KeyD.pressed) {
       this.switchSprite("run");
@@ -162,5 +195,33 @@ export class Player extends Sprite {
         this.switchSprite("idle");
       };
     }
+  }
+
+  hit(staggerDirection: "left" | "right") {
+    this.isHit = true;
+    this.switchSprite("hit");
+    if (staggerDirection === "left") {
+      this.lastDirection = "right";
+      this.velocity.x = -5;
+    } else {
+      this.lastDirection = "left";
+      this.velocity.x = 5;
+    }
+
+    if (this.preventInput) {
+      return;
+    } else {
+      setTimeout(() => {
+        this.isHit = false;
+        this.velocity.x = 0;
+      }, 250);
+    }
+  }
+
+  reset() {
+    this.velocity.x = 0;
+    this.velocity.y = 0;
+    this.preventInput = true;
+    this.isHit = false;
   }
 }

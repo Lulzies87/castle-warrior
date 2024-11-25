@@ -3,7 +3,6 @@ import "./assets/styles/style.scss";
 import "./assets/styles/game.scss";
 import { Player } from "./classes/Player";
 import { handleKeyDown, handleKeyUp } from "./eventListeners";
-import { CollisionBlock } from "./classes/CollisionBlock";
 import {
   background,
   diamonds,
@@ -27,7 +26,6 @@ canvas.height = 64 * 9;
 const c = canvas.getContext("2d");
 if (!c) throw new Error("Canvas context not found");
 
-let collisionBlocks: CollisionBlock[] = [];
 let level: number = 1;
 let fps: number = 60;
 let interval: number = Math.floor(1000 / fps);
@@ -36,56 +34,7 @@ let previousTime: number = startTime;
 let currentTime: number = 0;
 let deltaTime: number = 0;
 
-export const player = new Player({
-  imageSrc: "../src/assets/img/king/idle.png",
-  frameRate: 11,
-  animations: {
-    idle: {
-      frameRate: 11,
-      frameBuffer: 4,
-      loop: true,
-      imageSrc: "../src/assets/img/king/idle.png",
-    },
-    run: {
-      frameRate: 8,
-      frameBuffer: 4,
-      loop: true,
-      imageSrc: "../src/assets/img/king/run.png",
-    },
-    attack: {
-      frameRate: 3,
-      frameBuffer: 4,
-      loop: false,
-      imageSrc: "../src/assets/img/king/attack.png",
-      onComplete: () => {
-        player.isAttacking = false;
-        player.switchSprite("idle");
-      },
-    },
-    enterDoor: {
-      frameRate: 8,
-      frameBuffer: 6,
-      loop: false,
-      imageSrc: "../src/assets/img/king/enterDoor.png",
-      onComplete: () => {
-        instructionManager.stop();
-        gsap.to(overlay, {
-          opacity: 1,
-          onComplete: () => {
-            level++;
-            if (level === 4) level = 1;
-            init(levels[level]);
-            player.preventInput = false;
-            gsap.to(overlay, {
-              opacity: 0,
-            });
-          },
-        });
-      },
-    },
-  },
-  collisionBlocks: collisionBlocks,
-});
+export const player = new Player({});
 
 export const keys = {
   KeyW: {
@@ -101,6 +50,22 @@ export const keys = {
 const overlay = {
   opacity: 0,
 };
+
+export function nextLevel() {
+  instructionManager.stop();
+  gsap.to(overlay, {
+    opacity: 1,
+    onComplete: () => {
+      level++;
+      if (level === 4) level = 1;
+      init(levels[level]);
+      player.preventInput = false;
+      gsap.to(overlay, {
+        opacity: 0,
+      });
+    },
+  });
+}
 
 function update(c: CanvasRenderingContext2D) {
   player.update();

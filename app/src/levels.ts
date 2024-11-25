@@ -225,34 +225,12 @@ export function init(levelData: Level) {
     enemiesData.forEach((enemy) => {
       enemies.push(
         new Enemy({
-          imageSrc: "../src/assets/img/pig/idle.png",
-          frameRate: 11,
           position: {
             x: enemy.position.x,
             y: enemy.position.y,
           },
           collisionBlocks: collisionBlocks,
           player: player,
-          animations: {
-            idle: {
-              frameRate: 11,
-              frameBuffer: 4,
-              loop: true,
-              imageSrc: "../src/assets/img/pig/idle.png",
-            },
-            run: {
-              frameRate: 6,
-              frameBuffer: 4,
-              loop: true,
-              imageSrc: "../src/assets/img/pig/run.png",
-            },
-            attack: {
-              frameRate: 5,
-              frameBuffer: 6,
-              loop: true,
-              imageSrc: "../src/assets/img/pig/attack.png",
-            },
-          },
         })
       );
     });
