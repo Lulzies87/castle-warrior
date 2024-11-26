@@ -34,7 +34,7 @@ let previousTime: number = startTime;
 let currentTime: number = 0;
 let deltaTime: number = 0;
 
-export const player = new Player({});
+export const player = new Player();
 
 export const keys = {
   KeyW: {

@@ -1,18 +1,18 @@
 import { Sprite } from "./Sprite";
-import { PlayerConstructor } from "../types/PlayerConstructor";
 import { nextLevel } from "../main";
+import { CollisionBlock } from "./CollisionBlock";
 
 export class Player extends Sprite {
   velocity: Vector2D = { x: 0, y: 0 };
   gravity: number = 1;
-  collisionBlocks: Box[];
+  collisionBlocks: CollisionBlock[] = [];
   hitbox?: Box;
-  preventInput?: boolean;
-  lastDirection?: string;
-  isAttacking?: boolean = false;
-  isHit?: boolean = false;
+  preventInput: boolean = false;
+  lastDirection: "left" | "right" = "right";
+  isAttacking: boolean = false;
+  isHit: boolean = false;
 
-  constructor({ collisionBlocks = [] }: PlayerConstructor) {
+  constructor() {
     super({
       position: { x: 200, y: 200 },
       imageSrc: "../src/assets/img/king/idle.png",
@@ -57,8 +57,6 @@ export class Player extends Sprite {
         },
       },
     });
-
-    this.collisionBlocks = collisionBlocks;
   }
 
   update() {
