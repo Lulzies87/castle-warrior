@@ -185,14 +185,6 @@ export class Player extends Sprite {
     if (this.isAttacking) return;
     this.isAttacking = true;
     this.switchSprite("attack");
-
-    const attackAnimation = this.animations?.["attack"];
-    if (attackAnimation) {
-      attackAnimation.onComplete = () => {
-        this.isAttacking = false;
-        this.switchSprite("idle");
-      };
-    }
   }
 
   hit(staggerDirection: "left" | "right") {
@@ -205,6 +197,7 @@ export class Player extends Sprite {
       this.lastDirection = "left";
       this.velocity.x = 5;
     }
+    this.velocity.y = -6;
 
     if (this.preventInput) {
       return;
