@@ -67,7 +67,7 @@ export function nextLevel() {
   });
 }
 
-function update(c: CanvasRenderingContext2D) {
+function update() {
   player.update();
 
   enemies.forEach((enemy) => {
@@ -107,7 +107,7 @@ function animate(timestamp: number) {
     previousTime = currentTime - (deltaTime % interval);
 
     player.handleInput(keys);
-    update(c);
+    update();
     drawLevel(c);
 
     c.save();
