@@ -10,8 +10,8 @@ export class Enemy extends Sprite {
   visionbox?: Box;
   player: Player;
   lastDirection?: "left" | "right";
-  isAttacking?: boolean;
-  lastAttackTime: number;
+  isAttacking: boolean = false;
+  lastAttackTime: number = 0;
 
   constructor({ position, collisionBlocks, player }: EnemyConstructor) {
     super({
@@ -45,11 +45,8 @@ export class Enemy extends Sprite {
     });
 
     this.position = position;
-    if (!collisionBlocks || !player)
-      throw new Error("collisionBlocks or player data missing");
     this.collisionBlocks = collisionBlocks;
     this.player = player;
-    this.lastAttackTime = 0;
   }
 
   update(player: Player) {
