@@ -36,7 +36,6 @@ export class Player extends Sprite {
           loop: false,
           imageSrc: "../src/assets/img/king/attack.png",
           onComplete: () => {
-            this.isAttacking = false;
             this.switchSprite("idle");
           },
         },
@@ -185,6 +184,9 @@ export class Player extends Sprite {
     if (this.isAttacking) return;
     this.isAttacking = true;
     this.switchSprite("attack");
+    setTimeout(() => {
+      this.isAttacking = false;
+    }, 400);
   }
 
   hit(staggerDirection: "left" | "right") {
@@ -210,9 +212,9 @@ export class Player extends Sprite {
   }
 
   reset() {
-    this.velocity.x = 0;
-    this.velocity.y = 0;
     this.preventInput = true;
     this.isHit = false;
+    this.velocity.x = 0;
+    this.velocity.y = 0;
   }
 }

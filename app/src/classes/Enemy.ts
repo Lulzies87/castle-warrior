@@ -1,17 +1,19 @@
 import { Sprite } from "./Sprite";
 import { EnemyConstructor } from "../types/EnemyConstructor";
 import { Player } from "./Player";
+import { CollisionBlock } from "./CollisionBlock";
 
 export class Enemy extends Sprite {
   velocity: Vector2D = { x: 0, y: 0 };
   gravity: number = 1;
-  collisionBlocks: Box[];
+  collisionBlocks: CollisionBlock[];
   hitbox?: Box;
   visionbox?: Box;
   player: Player;
   lastDirection?: "left" | "right";
   isAttacking: boolean = false;
   lastAttackTime: number = 0;
+  isHit: boolean = false;
 
   constructor({ position, collisionBlocks, player }: EnemyConstructor) {
     super({
@@ -41,6 +43,12 @@ export class Enemy extends Sprite {
             this.switchSprite("idle");
           },
         },
+        hit: {
+          frameRate: 2,
+          frameBuffer: 4,
+          loop: true,
+          imageSrc: "../src/assets/img/pig/hit.png",
+        },
       },
     });
 
@@ -52,6 +60,7 @@ export class Enemy extends Sprite {
   update(player: Player) {
     this.player = player;
     this.position.x += this.velocity.x;
+    this.checkForPlayerAttack();
 
     this.updateHitbox();
     this.updateVisionbox();
@@ -123,7 +132,7 @@ export class Enemy extends Sprite {
 
   checkForHorizontalCollisions() {
     for (let i = 0; i < this.collisionBlocks.length; i++) {
-      const collisionBlock: Box = this.collisionBlocks[i];
+      const collisionBlock: CollisionBlock = this.collisionBlocks[i];
       if (
         this.hitbox &&
         this.hitbox.sides.left <= collisionBlock.sides.right &&
@@ -179,8 +188,8 @@ export class Enemy extends Sprite {
   }
 
   lookForPlayer() {
+    if (this.isAttacking || this.isHit) return;
     this.velocity.x = 0;
-    if (this.isAttacking) return;
     if (
       this.visionbox &&
       this.player.hitbox &&
@@ -213,7 +222,12 @@ export class Enemy extends Sprite {
     const currentTime = Date.now();
     const attackCooldown = 1500;
 
-    if (this.isWithinReach() && this.hitbox && this.player.hitbox) {
+    if (
+      this.isWithinReach() &&
+      this.hitbox &&
+      this.player.hitbox &&
+      !this.isHit
+    ) {
       this.velocity.x = 0;
       this.isAttacking = true;
       const playerCenterX =
@@ -245,5 +259,23 @@ export class Enemy extends Sprite {
     )
       return true;
     return false;
+  }
+
+  checkForPlayerAttack() {
+    if (this.player.isAttacking && this.isWithinReach()) {
+      this.hit();
+    }
+  }
+
+  hit() {
+    this.isHit = true;
+    this.switchSprite("hit");
+    this.velocity.x = 5;
+    this.velocity.y = -2;
+
+    setTimeout(() => {
+      this.isHit = false;
+      this.velocity.x = 0;
+    }, 250);
   }
 }
