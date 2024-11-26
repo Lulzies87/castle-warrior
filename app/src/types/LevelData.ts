@@ -18,7 +18,7 @@ export interface Level {
     imageSrc: string;
     position: Vector2D;
   };
-  player: { position: Vector2D };
+  player: { position: Vector2D; direction: "left" | "right" };
   collisions: number[];
   doors: Position[];
   diamonds: Position[];

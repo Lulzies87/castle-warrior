@@ -32,7 +32,7 @@ export const levels: LevelData = {
         y: 0,
       },
     },
-    player: { position: { x: 200, y: 200 } },
+    player: { position: { x: 200, y: 200 }, direction: "right"  },
     collisions: [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 292, 292, 292, 292, 292, 292, 292, 292, 292, 292,
@@ -83,7 +83,7 @@ export const levels: LevelData = {
         y: 0,
       },
     },
-    player: { position: { x: 60, y: 70 } },
+    player: { position: { x: 60, y: 70 }, direction: "right"  },
     collisions: [
       292, 292, 292, 292, 292, 292, 292, 0, 0, 0, 0, 0, 0, 0, 0, 0, 292, 0, 0,
       0, 0, 0, 292, 0, 0, 0, 0, 0, 0, 0, 0, 0, 292, 0, 0, 0, 0, 0, 292, 0, 0, 0,
@@ -138,7 +138,7 @@ export const levels: LevelData = {
         y: 0,
       },
     },
-    player: { position: { x: 680, y: 140 } },
+    player: { position: { x: 680, y: 140 }, direction: "left" },
     collisions: [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 250, 250, 250,
       250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 0, 0, 250, 0, 0, 0, 0,
@@ -179,7 +179,7 @@ export function init(levelData: Level) {
   collisionBlocks = createObjectsFrom2D(parsedCollisions);
 
   player.collisionBlocks = collisionBlocks;
-  player.lastDirection = "left";
+  player.lastDirection = levelData.player.direction;
   player.position.x = levelData.player.position.x;
   player.position.y = levelData.player.position.y;
 
