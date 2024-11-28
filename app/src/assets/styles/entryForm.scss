@@ -16,7 +16,8 @@
 
 .link {
     color: $accent;
-
+    cursor: pointer;
+    
     &:hover {
         color: $hover;
     }
